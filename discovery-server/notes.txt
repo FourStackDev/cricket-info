@@ -1,0 +1,39 @@
+Steps for Eureka Server and Client
+##########################################
+
+Eureka Server
+--------------
+
+1. Create the Eureka server spring project using Eureka Server as dependency.
+
+2. Add JAXB dependencies (required only on Java9 onwards)
+
+3. Add @EnableEurekaServer annotation to the main class
+
+4. To overcome the intialize error add port (not mandatory) and other properties
+	- For application.properties
+			#Configure the Server Port
+			server.port=8761
+
+			#Configure Eureka Server to not to configure itself as a Client
+			eureka.client.register-with-eureka=false
+			eureka.client.fetch-registry=false
+	
+	- For application.yml
+	       #Configure the Server Port
+			server:
+                port: 8761
+
+
+          #Configure Eureka Server to not to configure itself as a Client
+            eureka:
+                client:
+                    register-with-eureka: false
+                    fetch-registry: false
+                    
+                    
+Eureka Client
+--------------
+1. Add Eureka client dependency to services (along with the spring.cloud.version property) - download from the start.spring.io
+
+2. Add spring cloud dependencies in dependencyManagement section
