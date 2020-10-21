@@ -2,5 +2,10 @@
 server:
    port: 8084
 
+# Add application properties
+spring:
+   application:
+       name: ranking-info-service
+
 #Enable H2 database Console
 spring.h2.console.enabled: true

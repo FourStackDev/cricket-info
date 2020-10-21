@@ -37,3 +37,16 @@ Eureka Client
 1. Add Eureka client dependency to services (along with the spring.cloud.version property) - download from the start.spring.io
 
 2. Add spring cloud dependencies in dependencyManagement section
+
+3. Eureka clients will be registered as UNKNOWN. To overcome this add application name in application.properties or application.yml
+	Ex: spring.application.name=player-info-service
+	
+4. Add @EnableEurekaClient (not mandatory) - For the services those are acting as clients.
+
+
+5. Add @LoadBalanced annotation to the RestTemplate beans
+
+6. Update the urls with service name
+	-> http://localhost:8082/api/v1/player-info/players-profiles  To 
+	http://player-info-service/api/v1/player-info/players-profiles
+	
