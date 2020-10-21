@@ -1,0 +1,10 @@
+#Configure the Server Port
+server:
+   port: 8761
+
+
+#Configure Eureka Server to not to configure itself as a Client
+eureka:
+   client:
+      register-with-eureka: false
+      fetch-registry: false
