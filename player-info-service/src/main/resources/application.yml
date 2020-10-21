@@ -2,6 +2,11 @@
 server:
    port: 8082
 
+# Add application name
+spring:
+    application:
+        name: player-info-service
+
 #Enable H2 database Console
 spring.h2.console.enabled: true
 

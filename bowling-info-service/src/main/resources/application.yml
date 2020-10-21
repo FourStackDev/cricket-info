@@ -2,5 +2,10 @@
 server:
    port: 8088
 
+# Add application name
+spring:
+    application:
+         name: bowling-info-service
+
 #Enable H2 database Console
 spring.h2.console.enabled: true
