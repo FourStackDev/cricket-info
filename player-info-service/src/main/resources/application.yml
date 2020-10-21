@@ -1,0 +1,13 @@
+#Enable H2 database Console
+spring.h2.console.enabled: true
+
+
+#Thread Pool Executor Constants
+CORE_POOL_SIZE: 20
+MAX_POOL_SIZE: 100
+QUEUE_CAPACITY: 50
+THREAD_NAME_PREFIX: Async-
+
+
+# TO overcome the conversion of LocalDate
+spring.jackson.serialization.write_dates_as_timestamps: false
