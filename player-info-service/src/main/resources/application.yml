@@ -1,3 +1,7 @@
+#define the port number
+server:
+   port: 8082
+
 #Enable H2 database Console
 spring.h2.console.enabled: true
 

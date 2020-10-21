@@ -23,8 +23,8 @@ public class BattingInfoController {
 
 	@GetMapping("/player-batting-statistics")
 	public Page<PlayerBattingInfo> getPlayersBattingStatistics(
-			@RequestParam(value = "pageNum", required = false) Integer pageNum,
-			@RequestParam(value = "pageSize", required = false) Integer pageSize) {
+			@RequestParam(value = "pageNum", required = false, defaultValue = "0") Integer pageNum,
+			@RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize) {
 		pageNum = (pageNum == null) ? DEFAULT_PAGE_NUM : pageNum;
 		pageSize = (pageSize == null) ? DEFAULT_PAGE_SIZE : pageSize;
 
