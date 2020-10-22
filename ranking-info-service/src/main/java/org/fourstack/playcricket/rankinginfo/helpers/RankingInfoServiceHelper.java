@@ -28,6 +28,9 @@ public class RankingInfoServiceHelper {
 
 	@Autowired
 	private RankingDataModelMappingHelper modelMappingHelper;
+	
+	@Autowired
+	private RankingExternalApiHelper externalApiHelper;
 
 	public List<IccRanking> getIccRankingList() {
 		log.debug("RankingInfoServiceHelper.getIccRankingList() - Start");
@@ -48,7 +51,7 @@ public class RankingInfoServiceHelper {
 		log.debug("RankingInfoServiceHelper.getIccRankingsPage() - Start");
 		Page<IccRankingData> rankingDataPage = rankingRepository.findAll(pageable);
 
-		if (rankingDataPage == null || rankingDataPage.getNumber() == 0)
+		if (rankingDataPage == null || !rankingDataPage.hasContent())
 			throw new RuntimeException("NO DATA FOUND");
 
 		Page<IccRanking> iccRankingPage = modelMappingHelper.convertIccRankingDataPageToIccRankingPage(rankingDataPage,
@@ -86,18 +89,20 @@ public class RankingInfoServiceHelper {
 	}
 
 	public IccRanking saveIccRanking(IccRanking ranking) {
-		IccRankingData rankingDataModel = modelMappingHelper.mapIccRankingModelToDataModel(ranking);
+		//if (externalApiHelper.checkIfPlayerExistsForId(ranking.getPlayerId())) {
+			IccRankingData rankingDataModel = modelMappingHelper.mapIccRankingModelToDataModel(ranking);
 
-		/**
-		 * Save each ranking in the List
-		 */
-		List<RankingInfoData> rankingInfoDataList = rankingDataModel.getRankings().stream()
-				.map(individualRanking -> rankingDataRepository.save(individualRanking)).collect(Collectors.toList());
+			/**
+			 * Save each ranking in the List
+			 */
+			List<RankingInfoData> rankingInfoDataList = rankingDataModel.getRankings().stream()
+					.map(individualRanking -> rankingDataRepository.save(individualRanking)).collect(Collectors.toList());
 
-		rankingDataModel.setRankings(rankingInfoDataList);
-		rankingRepository.save(rankingDataModel);
+			rankingDataModel.setRankings(rankingInfoDataList);
+			rankingRepository.save(rankingDataModel);
 
-		ranking.setRankingId(rankingDataModel.getRankingId());
+			ranking.setRankingId(rankingDataModel.getRankingId());
+		//}		
 		return ranking;
 	}
 }
