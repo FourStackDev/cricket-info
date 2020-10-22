@@ -26,4 +26,7 @@ public class PlayerInfoProperties {
 	/**
 	 * End >>>> Thread Pool Constants
 	 */
+	
+	@Value("${PATCH_METHOD_TIMEOUT}")
+	private int timeOut;
 }

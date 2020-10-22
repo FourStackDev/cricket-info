@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class PlayerUniqueIdGenerator {
 
-	@Async
+	@Async("AsyncThreadPoolExecutor")
 	public CompletableFuture<String> generatePlayerUniqueId(String playerFirstName) {
 		String uniqueId = "";
 		if (playerFirstName != null) {

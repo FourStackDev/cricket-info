@@ -14,7 +14,7 @@ public class PlayerBasicInfoHelper {
 	@Autowired
 	private PlayerBasicInfoRepository repository;
 
-	@Async
+	@Async("AsyncThreadPoolExecutor")
 	public CompletableFuture<PlayerBasicInfo> savePlayerBasicInfo(PlayerBasicInfo playerInfo) {
 		PlayerBasicInfo savedPlayerBasicInfo = repository.save(playerInfo);
 		return CompletableFuture.completedFuture(savedPlayerBasicInfo);
