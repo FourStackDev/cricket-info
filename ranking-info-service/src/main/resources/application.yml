@@ -12,3 +12,7 @@ PATCH_METHOD_TIMEOUT: 120000
 
 #Enable H2 database Console
 spring.h2.console.enabled: true
+
+#API URLS
+player.info:
+          check-palayer-exists: http://player-info-service/api/internal/player-info/{player-id}/exists

@@ -11,4 +11,7 @@ public class RankingServiceProperties {
 	
 	@Value("${PATCH_METHOD_TIMEOUT}")
 	private int timeOut;
+	
+	@Value("${player.info.check-palayer-exists}")
+	private String urlCheckIfPlayerExists;
 }
