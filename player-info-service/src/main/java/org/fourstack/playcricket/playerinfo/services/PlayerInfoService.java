@@ -9,7 +9,12 @@ import org.springframework.data.domain.Pageable;
 public interface PlayerInfoService {
 	
 	public List<PlayerProfileInfo> fetchAllPlayersInfo();
+	
 	public PlayerProfileInfo fetchPlayerById(String playerId);
+	
 	public Page<PlayerProfileInfo> fetchPlayersProfiles(Pageable pageable);
+	
 	public PlayerProfileInfo savePlayerProfile(PlayerProfileInfo playerProfile);
+	
+	public boolean isPlayerProfileExistsOrNot(String playerId);
 }
