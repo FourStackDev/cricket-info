@@ -1,6 +1,7 @@
 package org.fourstack.playcricket.playerinfo.config;
 
 import java.util.Optional;
+import java.util.function.Predicate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.info.BuildProperties;
@@ -11,6 +12,7 @@ import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -31,12 +33,21 @@ public class SwaggerConfigurations {
 				.apiInfo(apiInfo(version))
 				.select()
 				.apis(RequestHandlerSelectors.basePackage("org.fourstack.playcricket.playerinfo.controllers"))
-				.paths(PathSelectors.regex("/api/v1/player-info.*"))
+				.paths(apiPaths())
 				.build();
 	}
 
 	private ApiInfo apiInfo(String version) {
-		return new ApiInfoBuilder().title("Player Information Service").description("Player Info").version(version)
+		Contact contact = new Contact("Manjunath HM", "http://dummy.org", "fourstackdevelopers@gmail.com");
+		return new ApiInfoBuilder().title("Player Information Service")
+				.description("Player Info")
+				.version(version)
+				.contact(contact)
 				.build();
+	}
+
+	private Predicate<String> apiPaths() {
+		return PathSelectors.regex("/api/v1/player-info.*")
+				.or(PathSelectors.regex("/api/internal/player-info.*"));
 	}
 }

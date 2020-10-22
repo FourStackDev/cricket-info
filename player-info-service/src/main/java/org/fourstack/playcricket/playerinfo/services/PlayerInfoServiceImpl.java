@@ -38,4 +38,10 @@ public class PlayerInfoServiceImpl implements PlayerInfoService {
 		return playerInfoHelper.savePlayerProfile(playerProfile);
 	}
 
+	@Override
+	public boolean isPlayerProfileExistsOrNot(String playerId) {
+		PlayerProfileInfo fetchPlayerById = fetchPlayerById(playerId);
+		return fetchPlayerById != null ? Boolean.TRUE : Boolean.FALSE;
+	}
+
 }
