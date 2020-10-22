@@ -10,6 +10,8 @@ spring:
 #Enable H2 database Console
 spring.h2.console.enabled: true
 
+PATCH_METHOD_TIMEOUT: 120000
+
 
 #Thread Pool Executor Constants
 CORE_POOL_SIZE: 20

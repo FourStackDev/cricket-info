@@ -7,5 +7,7 @@ spring:
     application:
          name: batting-info-service
 
+PATCH_METHOD_TIMEOUT: 120000
+
 #Enable H2 database Console
 spring.h2.console.enabled: true
