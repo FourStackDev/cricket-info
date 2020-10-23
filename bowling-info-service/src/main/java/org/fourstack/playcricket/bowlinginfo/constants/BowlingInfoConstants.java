@@ -11,6 +11,10 @@ public class BowlingInfoConstants {
 	public static final String FORMAT_T20 = "T20";
 
 	public static final String HYPEN = "-";
+	
+	public static final String FORMAT = "format";
+	
+	public static final String PLAYER_ID = "playerId";
 
 	public static final int DEFAULT_PAGE_NUM = 0;
 	public static final int DEFAULT_PAGE_SIZE = 10;

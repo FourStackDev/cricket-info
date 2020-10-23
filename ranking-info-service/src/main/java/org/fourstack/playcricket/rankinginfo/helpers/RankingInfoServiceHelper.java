@@ -89,7 +89,7 @@ public class RankingInfoServiceHelper {
 	}
 
 	public IccRanking saveIccRanking(IccRanking ranking) {
-		//if (externalApiHelper.checkIfPlayerExistsForId(ranking.getPlayerId())) {
+		if (externalApiHelper.checkIfPlayerExistsForId(ranking.getPlayerId())) {
 			IccRankingData rankingDataModel = modelMappingHelper.mapIccRankingModelToDataModel(ranking);
 
 			/**
@@ -102,7 +102,7 @@ public class RankingInfoServiceHelper {
 			rankingRepository.save(rankingDataModel);
 
 			ranking.setRankingId(rankingDataModel.getRankingId());
-		//}		
+		}		
 		return ranking;
 	}
 }
