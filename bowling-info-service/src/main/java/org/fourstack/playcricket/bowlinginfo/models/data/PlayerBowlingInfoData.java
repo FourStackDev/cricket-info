@@ -3,9 +3,12 @@ package org.fourstack.playcricket.bowlinginfo.models.data;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -30,7 +33,8 @@ public class PlayerBowlingInfoData {
 	@Column(name = "playerId", unique = true)
 	private String playerId;
 
-	@OneToMany
+	@OneToMany(targetEntity = BowlingInfoData.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+	@JoinColumn(name = "playerBowlId", referencedColumnName = "playerBowlingInfoId")
 	private List<BowlingInfoData> statistics;
 
 	@CreationTimestamp

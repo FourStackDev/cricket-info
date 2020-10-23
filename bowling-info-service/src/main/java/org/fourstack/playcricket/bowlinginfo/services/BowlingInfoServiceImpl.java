@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.fourstack.playcricket.bowlinginfo.helpers.BowlingInfoServiceHelper;
 import org.fourstack.playcricket.bowlinginfo.helpers.BowlingInfoValidationHelper;
+import org.fourstack.playcricket.bowlinginfo.models.BowlingInfo;
 import org.fourstack.playcricket.bowlinginfo.models.PlayerBowlingInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -43,5 +44,12 @@ public class BowlingInfoServiceImpl implements BowlingInfoService {
 	public PlayerBowlingInfo savePlayerBowlingStatistics(PlayerBowlingInfo bowlingInfo) {
 		validationHelper.validatePlayerBowlingInfo(bowlingInfo);
 		return bowlingHelper.savePlayersBowlingStatistics(bowlingInfo);
+	}
+
+	@Override
+	public PlayerBowlingInfo patchBowlingStatisticsToPlayer(String playerId, BowlingInfo bowlingInfo) {
+		validationHelper.validatePlayerId(playerId);
+		validationHelper.validateCricketFormat(bowlingInfo.getFormat());
+		return bowlingHelper.patchBowlingStatisticsToPlayer(playerId, bowlingInfo);
 	}
 }
