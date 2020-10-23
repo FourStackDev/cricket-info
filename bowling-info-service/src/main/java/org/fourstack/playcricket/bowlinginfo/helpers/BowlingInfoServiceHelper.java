@@ -25,6 +25,9 @@ public class BowlingInfoServiceHelper {
 	@Autowired
 	private BowlingDataModelMappingHelper mappingHelper;
 
+	@Autowired
+	private BowlingExternalApiHelper externalApiHelper;
+
 	public List<PlayerBowlingInfo> getAllPlayersBowlingStatistics() {
 		List<PlayerBowlingInfoData> dataList = playerBowlingRepository.findAll();
 
@@ -64,13 +67,14 @@ public class BowlingInfoServiceHelper {
 	}
 
 	public PlayerBowlingInfo savePlayersBowlingStatistics(PlayerBowlingInfo bowlingInfo) {
-		PlayerBowlingInfoData bowlingData = mappingHelper.mapBowlingInfoToDatabaseModel(bowlingInfo);
+		if (externalApiHelper.checkIfPlayerExistsForPlayerId(bowlingInfo.getPlayerId())) {
+			PlayerBowlingInfoData bowlingData = mappingHelper.mapBowlingInfoToDatabaseModel(bowlingInfo);
 
-		bowlingData.getStatistics().stream().forEach(data -> bowlingRepository.save(data));
-		playerBowlingRepository.save(bowlingData);
-		
-		bowlingInfo.setBowlingInfoId(bowlingData.getPlayerBowlingInfoId());
+			bowlingData.getStatistics().stream().forEach(data -> bowlingRepository.save(data));
+			playerBowlingRepository.save(bowlingData);
+
+			bowlingInfo.setBowlingInfoId(bowlingData.getPlayerBowlingInfoId());
+		}
 		return bowlingInfo;
-
 	}
 }

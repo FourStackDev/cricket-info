@@ -14,7 +14,7 @@ public class BowlingInfoValidationHelper {
 		if (format == null)
 			throw new RuntimeException("Missing Required Field: " + FORMAT);
 
-		if (format != TEST || format != ODI || format != T20)
+		if (format != TEST && format != ODI && format != T20)
 			throw new RuntimeException("Invalid Data: " + FORMAT);
 	}
 

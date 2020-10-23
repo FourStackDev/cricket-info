@@ -26,7 +26,7 @@ public class RankingInfoValidationHelper {
 		if (area == null)
 			throw new RuntimeException(MISSING_REQUIRED_FIELD + FORMAT);
 
-		if (area != TEST || area != ODI || area != T20) {
+		if (area != TEST && area != ODI && area != T20) {
 			String validValues = TEST.name() + COMMA + ODI.name() + COMMA + T20.name();
 			throw new RuntimeException(PROVIDED_INVALID_DATA + FORMAT + DOT_SPACE + VALID_VALUES + validValues);
 		}
@@ -36,7 +36,7 @@ public class RankingInfoValidationHelper {
 		if (field == null)
 			throw new RuntimeException(MISSING_REQUIRED_FIELD + RANKING_FIELD);
 
-		if (field != BAT || field != BOWL || field != ALLROUND) {
+		if (field != BAT && field != BOWL && field != ALLROUND) {
 			String validValues = BAT.name() + COMMA + BOWL.name() + COMMA + ALLROUND.name();
 			throw new RuntimeException(PROVIDED_INVALID_DATA + RANKING_FIELD + DOT_SPACE + VALID_VALUES + validValues);
 		}
