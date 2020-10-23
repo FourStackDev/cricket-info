@@ -1,6 +1,7 @@
 package org.fourstack.playcricket.battinginfo.controllers;
 
-import static org.fourstack.playcricket.battinginfo.constants.BattingInfoServiceConstants.*;
+import static org.fourstack.playcricket.battinginfo.constants.BattingInfoServiceConstants.DEFAULT_PAGE_NUM;
+import static org.fourstack.playcricket.battinginfo.constants.BattingInfoServiceConstants.DEFAULT_PAGE_SIZE;
 
 import org.fourstack.playcricket.battinginfo.models.BattingInfo;
 import org.fourstack.playcricket.battinginfo.models.PlayerBattingInfo;
@@ -19,9 +20,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.swagger.annotations.ApiOperation;
 

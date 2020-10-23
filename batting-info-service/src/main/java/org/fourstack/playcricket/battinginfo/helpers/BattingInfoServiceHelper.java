@@ -15,9 +15,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 @Component
 public class BattingInfoServiceHelper {
 
@@ -87,10 +84,9 @@ public class BattingInfoServiceHelper {
 	}
 	
 	public PlayerBattingInfoData savePlayersBattingData(PlayerBattingInfoData playerBattingData) {
-		for (BattingInfoData data : playerBattingData.getStatistics()) {
-			System.out.println("Saving the data for :"+data.getBattingInfoId());
-			battingInfoRepository.save(data);
-		}
+		playerBattingData.getStatistics()
+		                 .stream()
+		                 .forEach(data -> battingInfoRepository.save(data));
 		return playerBattingInfoRepository.save(playerBattingData);
 	}
 	
@@ -116,10 +112,9 @@ public class BattingInfoServiceHelper {
 					statistics.add(currentData);
 				} else {
 					// if data exists update the new values
-					existingData = updateBattingInfoData(existingData, currentData);
+					updateBattingInfoData(existingData, currentData);
 				}
 
-				printObjects(playerData);
 				// Save the data to Database
 				savePlayersBattingData(playerData);
 				return mappingHelper.mapPlayerBattingDataModelToApiExposedModel(playerData);
@@ -128,7 +123,7 @@ public class BattingInfoServiceHelper {
 		return null;
 	}
 	
-	public BattingInfoData updateBattingInfoData(BattingInfoData existingData, BattingInfoData currentData) {
+	public void updateBattingInfoData(BattingInfoData existingData, BattingInfoData currentData) {
 		if (currentData.getAverage() > 0)
 			existingData.setAverage(currentData.getAverage());
 
@@ -182,17 +177,5 @@ public class BattingInfoServiceHelper {
 
 		if (currentData.getStrikeRate() > 0)
 			existingData.setStrikeRate(currentData.getStrikeRate());
-		
-		return existingData;
-	}
-	
-	private void printObjects(Object obj) {
-		ObjectMapper mapper = new ObjectMapper();
-		try {
-			System.out.println(mapper.writeValueAsString(obj));
-		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 }

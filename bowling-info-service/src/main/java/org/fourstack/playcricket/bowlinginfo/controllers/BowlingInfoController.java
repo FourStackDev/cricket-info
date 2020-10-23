@@ -1,7 +1,10 @@
 package org.fourstack.playcricket.bowlinginfo.controllers;
 
-import static org.fourstack.playcricket.bowlinginfo.constants.BowlingInfoConstants.*;
+import static org.fourstack.playcricket.bowlinginfo.constants.BowlingInfoConstants.DEFAULT_PAGE_NUM;
+import static org.fourstack.playcricket.bowlinginfo.constants.BowlingInfoConstants.DEFAULT_PAGE_SIZE;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+import org.fourstack.playcricket.bowlinginfo.models.BowlingInfo;
 import org.fourstack.playcricket.bowlinginfo.models.PlayerBowlingInfo;
 import org.fourstack.playcricket.bowlinginfo.services.BowlingInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -56,6 +60,15 @@ public class BowlingInfoController {
 	public ResponseEntity<PlayerBowlingInfo> savePlayerBowlingInformation(@RequestBody PlayerBowlingInfo bowlingInfo) {
 		PlayerBowlingInfo savedBowlingInfo = bowlingService.savePlayerBowlingStatistics(bowlingInfo);
 		return new ResponseEntity<PlayerBowlingInfo>(savedBowlingInfo, HttpStatus.CREATED);
+	}
+
+	@ApiOperation(httpMethod = "PATCH", value = "API to patch the Bowler Statistics")
+	@PatchMapping(value = "/bowler/{player-id}/statistics", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+	public ResponseEntity<PlayerBowlingInfo> patchBowlingStatistics(@PathVariable("player-id") String playerId,
+			@RequestBody BowlingInfo bowlingInfo) {
+		PlayerBowlingInfo patchedBowler = bowlingService.patchBowlingStatisticsToPlayer(playerId, bowlingInfo);
+		return new ResponseEntity<PlayerBowlingInfo>(patchedBowler, HttpStatus.OK);
+
 	}
 
 }

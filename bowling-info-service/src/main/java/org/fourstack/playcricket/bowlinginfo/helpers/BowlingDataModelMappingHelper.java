@@ -28,30 +28,34 @@ public class BowlingDataModelMappingHelper {
 		return data;
 	}
 
-	private List<BowlingInfoData> generatePlayerStatistics(List<BowlingInfo> bowlingInfoList, String playerId) {
+	public List<BowlingInfoData> generatePlayerStatistics(List<BowlingInfo> bowlingInfoList, String playerId) {
 		List<BowlingInfoData> bowlingInfoDataList = new ArrayList<>();
 		for (BowlingInfo info : bowlingInfoList) {
-			BowlingInfoData data = new BowlingInfoData();
-			setFormat(data, info.getFormat());
-			data.setBowlingInfoId(generateBowlingInfoId(playerId, info.getFormat().name()));
-			data.setMatches(info.getMatches());
-			data.setInnings(info.getInnings());
-			data.setBalls(info.getBalls());
-			data.setRuns(info.getRuns());
-			data.setMaidens(info.getMaidens());
-			data.setWickets(info.getWickets());
-			data.setAverage(info.getAverage());
-			data.setEconomy(info.getEconomy());
-			data.setStrikeRate(info.getStrikeRate());
-			data.setBestBowlingInInnings(info.getBestBowlingInInnings());
-			data.setBestBowlingInMatch(info.getBestBowlingInMatch());
-			data.setFourWicketHaul(info.getFourWicketHaul());
-			data.setFiveWicketHaul(info.getFiveWicketHaul());
-			data.setTenWicketHaul(info.getTenWicketHaul());
+			BowlingInfoData data = mapBowlingInfoToData(playerId, info);
 			bowlingInfoDataList.add(data);
 		}
-
 		return bowlingInfoDataList;
+	}
+
+	public BowlingInfoData mapBowlingInfoToData(String playerId, BowlingInfo info) {
+		BowlingInfoData data = new BowlingInfoData();
+		setFormat(data, info.getFormat());
+		data.setBowlingInfoId(generateBowlingInfoId(playerId, info.getFormat().name()));
+		data.setMatches(info.getMatches());
+		data.setInnings(info.getInnings());
+		data.setBalls(info.getBalls());
+		data.setRuns(info.getRuns());
+		data.setMaidens(info.getMaidens());
+		data.setWickets(info.getWickets());
+		data.setAverage(info.getAverage());
+		data.setEconomy(info.getEconomy());
+		data.setStrikeRate(info.getStrikeRate());
+		data.setBestBowlingInInnings(info.getBestBowlingInInnings());
+		data.setBestBowlingInMatch(info.getBestBowlingInMatch());
+		data.setFourWicketHaul(info.getFourWicketHaul());
+		data.setFiveWicketHaul(info.getFiveWicketHaul());
+		data.setTenWicketHaul(info.getTenWicketHaul());
+		return data;
 	}
 
 	private void setFormat(BowlingInfoData data, CricketFormat format) {
@@ -91,32 +95,35 @@ public class BowlingDataModelMappingHelper {
 		return info;
 	}
 
-	private List<BowlingInfo> generatePlayerStatistics(List<BowlingInfoData> bowlingDataList) {
+	public List<BowlingInfo> generatePlayerStatistics(List<BowlingInfoData> bowlingDataList) {
 		List<BowlingInfo> bowlingInfoList = new ArrayList<>();
 
 		for (BowlingInfoData data : bowlingDataList) {
-			BowlingInfo info = new BowlingInfo();
-			setFormat(info, data.getFormat());
-
-			info.setMatches(data.getMatches());
-			info.setInnings(data.getInnings());
-			info.setBalls(data.getBalls());
-			info.setRuns(data.getRuns());
-			info.setMaidens(data.getMaidens());
-			info.setWickets(data.getWickets());
-			info.setAverage(data.getAverage());
-			info.setEconomy(data.getEconomy());
-			info.setStrikeRate(data.getStrikeRate());
-			info.setBestBowlingInInnings(data.getBestBowlingInInnings());
-			info.setBestBowlingInMatch(data.getBestBowlingInMatch());
-			info.setFourWicketHaul(data.getFourWicketHaul());
-			info.setFiveWicketHaul(data.getFiveWicketHaul());
-			info.setTenWicketHaul(data.getTenWicketHaul());
-
+			BowlingInfo info = mapBowlingDataToInfoModel(data);
 			bowlingInfoList.add(info);
 		}
-
 		return bowlingInfoList;
+	}
+
+	public BowlingInfo mapBowlingDataToInfoModel(BowlingInfoData data) {
+		BowlingInfo info = new BowlingInfo();
+		setFormat(info, data.getFormat());
+
+		info.setMatches(data.getMatches());
+		info.setInnings(data.getInnings());
+		info.setBalls(data.getBalls());
+		info.setRuns(data.getRuns());
+		info.setMaidens(data.getMaidens());
+		info.setWickets(data.getWickets());
+		info.setAverage(data.getAverage());
+		info.setEconomy(data.getEconomy());
+		info.setStrikeRate(data.getStrikeRate());
+		info.setBestBowlingInInnings(data.getBestBowlingInInnings());
+		info.setBestBowlingInMatch(data.getBestBowlingInMatch());
+		info.setFourWicketHaul(data.getFourWicketHaul());
+		info.setFiveWicketHaul(data.getFiveWicketHaul());
+		info.setTenWicketHaul(data.getTenWicketHaul());
+		return info;
 	}
 
 	private String generatePlayerBowlingInfoId(String playerId) {
