@@ -3,6 +3,7 @@ package org.fourstack.playcricket.bowlinginfo.services;
 import java.util.List;
 
 import org.fourstack.playcricket.bowlinginfo.helpers.BowlingInfoServiceHelper;
+import org.fourstack.playcricket.bowlinginfo.helpers.BowlingInfoValidationHelper;
 import org.fourstack.playcricket.bowlinginfo.models.PlayerBowlingInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,6 +15,9 @@ public class BowlingInfoServiceImpl implements BowlingInfoService {
 
 	@Autowired
 	private BowlingInfoServiceHelper bowlingHelper;
+	
+	@Autowired
+	private BowlingInfoValidationHelper validationHelper;
 
 	@Override
 	public List<PlayerBowlingInfo> getAllPlayersBowlingStatistics() {
@@ -37,6 +41,7 @@ public class BowlingInfoServiceImpl implements BowlingInfoService {
 
 	@Override
 	public PlayerBowlingInfo savePlayerBowlingStatistics(PlayerBowlingInfo bowlingInfo) {
+		validationHelper.validatePlayerBowlingInfo(bowlingInfo);
 		return bowlingHelper.savePlayersBowlingStatistics(bowlingInfo);
 	}
 }

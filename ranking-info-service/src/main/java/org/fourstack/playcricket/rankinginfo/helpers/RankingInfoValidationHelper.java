@@ -16,6 +16,7 @@ import static org.fourstack.playcricket.rankinginfo.constants.RankingErrorConsta
 
 import org.fourstack.playcricket.rankinginfo.codetype.RankingArea;
 import org.fourstack.playcricket.rankinginfo.codetype.RankingField;
+import org.fourstack.playcricket.rankinginfo.models.IccRanking;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -40,5 +41,15 @@ public class RankingInfoValidationHelper {
 			throw new RuntimeException(PROVIDED_INVALID_DATA + RANKING_FIELD + DOT_SPACE + VALID_VALUES + validValues);
 		}
 
+	}
+	
+	public void validateIccRankingRequiredFields(IccRanking iccRanking) {
+		iccRanking.getRankingInfo().stream().forEach(rankingInfo -> {
+			validateRankingArea(rankingInfo.getFormat());
+			
+			rankingInfo.getStatus().stream().forEach(rankingStatus -> {
+				validateRankingField(rankingStatus.getField());
+			});
+		});
 	}
 }

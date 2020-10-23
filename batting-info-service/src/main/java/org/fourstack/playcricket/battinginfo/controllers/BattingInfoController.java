@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 @RequestMapping("/api/v1/batting-service")
 public class BattingInfoController {
@@ -26,6 +30,7 @@ public class BattingInfoController {
 	@Autowired
 	private BattingInfoService battingInfoService;
 
+	@ApiOperation(httpMethod = "GET", value = "API to fetch page of Players Batting Statistics (Pagination Enabled - default page = 0, size = 10)")
 	@GetMapping("/player-batting-statistics")
 	public Page<PlayerBattingInfo> getPlayersBattingStatistics(
 			@RequestParam(value = "pageNum", required = false, defaultValue = "0") Integer pageNum,
@@ -37,25 +42,23 @@ public class BattingInfoController {
 		return battingInfoService.getPlayersBattingStatistics(pageable);
 	}
 
+	@ApiOperation(httpMethod = "GET", value = "API to fetch Player Batting Statistics based on the id")
 	@GetMapping("/player-batting-statistics/{id}")
 	public PlayerBattingInfo getPlayerBattingStatisticsById(@PathVariable(value = "id") String id) {
 		return battingInfoService.getPlayersBattingStatisticsById(id);
 	}
 
+	@ApiOperation(httpMethod = "GET", value = "API to fetch Player Batting Statistics based on the playerId")
 	@GetMapping("/player/{player-id}/batting-statistics")
 	public PlayerBattingInfo getPlayerBattingStatisticsByPlayerId(@PathVariable(value = "player-id") String playerId) {
 		return battingInfoService.getPlayersBattingStatisticsByPlayerId(playerId);
 	}
 	
+	@ApiOperation(httpMethod = "POST", value = "API to consume Player Batting Statistics and to save it to Database")
 	@PostMapping("/player-batting-statistics")
-	public void addPlayerBattingStatistics(@RequestBody PlayerBattingInfo battingInfo) {
-		ObjectMapper mapper = new ObjectMapper();
-		try {
-			System.out.println(mapper.writeValueAsString(battingInfo));
-		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public ResponseEntity<PlayerBattingInfo> addPlayerBattingStatistics(@RequestBody PlayerBattingInfo battingInfo) {
+		PlayerBattingInfo savedBattingInfo = battingInfoService.savePlayersBattingStatistics(battingInfo);
+		return new ResponseEntity<PlayerBattingInfo>(savedBattingInfo, HttpStatus.CREATED);
 	}
 
 }

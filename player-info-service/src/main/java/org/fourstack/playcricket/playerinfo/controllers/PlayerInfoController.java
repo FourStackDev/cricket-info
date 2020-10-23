@@ -26,7 +26,7 @@ public class PlayerInfoController {
 	@Autowired
 	private PlayerInfoService playerService;
 
-	@ApiOperation(httpMethod = "GET", value = "API to fetch the PlayerProfileInfo(Pagination Enabled - default page - 0, size - 10)")
+	@ApiOperation(httpMethod = "GET", value = "API to fetch Page of Player Profile Info(Pagination Enabled - default page - 0, size - 10)")
 	@GetMapping("/players-profiles")
 	public Page<PlayerProfileInfo> getAllPlayersProfiles(
 			@RequestParam(value = "pageNum", required = false, defaultValue = "0") Integer pageNum,
@@ -39,12 +39,13 @@ public class PlayerInfoController {
 
 	}
 
+	@ApiOperation(httpMethod = "GET", value = "API to fetch the Player profile Info using the playerId")
 	@GetMapping("/players-profiles/{playerId}")
 	public PlayerProfileInfo getPlayerProfileById(@RequestParam(value = "playerId") String playerId) {
 		return playerService.fetchPlayerById(playerId);
 	}
 
-	@ApiOperation(httpMethod = "POST", value = "API to consume PlayerProfileInfo and to save it to Database", hidden = true)
+	@ApiOperation(httpMethod = "POST", value = "API to consume Player Profile Info and to save it to Database", hidden = true)
 	@PostMapping(path = "/players", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
 	public PlayerProfileInfo addPlayerProfiles(@RequestBody PlayerProfileInfo playerProfile) {
 		return playerService.savePlayerProfile(playerProfile);

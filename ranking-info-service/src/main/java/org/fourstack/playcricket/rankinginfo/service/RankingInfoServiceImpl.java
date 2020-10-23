@@ -3,6 +3,7 @@ package org.fourstack.playcricket.rankinginfo.service;
 import java.util.List;
 
 import org.fourstack.playcricket.rankinginfo.helpers.RankingInfoServiceHelper;
+import org.fourstack.playcricket.rankinginfo.helpers.RankingInfoValidationHelper;
 import org.fourstack.playcricket.rankinginfo.models.IccRanking;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,6 +15,9 @@ public class RankingInfoServiceImpl implements RankingInfoService {
 
 	@Autowired
 	private RankingInfoServiceHelper rankingHelper;
+	
+	@Autowired
+	private RankingInfoValidationHelper validationHelper;
 
 	@Override
 	public List<IccRanking> getIccRankingList() {
@@ -37,6 +41,7 @@ public class RankingInfoServiceImpl implements RankingInfoService {
 
 	@Override
 	public IccRanking saveIccRanking(IccRanking ranking) {
+		validationHelper.validateIccRankingRequiredFields(ranking);
 		return rankingHelper.saveIccRanking(ranking);
 	}
 }

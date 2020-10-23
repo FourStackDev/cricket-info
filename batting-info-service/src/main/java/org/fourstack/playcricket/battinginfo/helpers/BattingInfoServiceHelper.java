@@ -24,6 +24,9 @@ public class BattingInfoServiceHelper {
 
 	@Autowired
 	private BattingDataModelMappingHelper mappingHelper;
+	
+	@Autowired
+	private BattingExternalApiHelper externalApiHelper;
 
 	public List<PlayerBattingInfo> getAllPlayersBattingStatistics() {
 		List<PlayerBattingInfoData> battingInfoDataList = playerBattingInfoRepository.findAll();
@@ -69,13 +72,14 @@ public class BattingInfoServiceHelper {
 	}
 
 	public PlayerBattingInfo savePlayersBattingStatistics(PlayerBattingInfo playerInfo) {
+		if (externalApiHelper.checkIfPlayerExistsForPlayerId(playerInfo.getPlayerId())) {
+			PlayerBattingInfoData playerDataModel = mappingHelper.mapBattingModelToDataBaseModel(playerInfo);
 
-		PlayerBattingInfoData playerDataModel = mappingHelper.mapBattingModelToDataBaseModel(playerInfo);
+			playerDataModel.getStatistics().forEach(battingData -> battingInfoRepository.save(battingData));
+			playerBattingInfoRepository.save(playerDataModel);
 
-		playerDataModel.getStatistics().forEach(battingData -> battingInfoRepository.save(battingData));
-		playerBattingInfoRepository.save(playerDataModel);
-
-		playerInfo.setBattingInfoId(playerDataModel.getPalyerBattingInfoId());
+			playerInfo.setBattingInfoId(playerDataModel.getPalyerBattingInfoId());
+		}
 		return playerInfo;
 	}
 }

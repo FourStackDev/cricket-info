@@ -4,6 +4,7 @@ import static org.fourstack.playcricket.bowlinginfo.constants.BowlingInfoConstan
 import static org.fourstack.playcricket.bowlinginfo.codetype.CricketFormat.*;
 
 import org.fourstack.playcricket.bowlinginfo.codetype.CricketFormat;
+import org.fourstack.playcricket.bowlinginfo.models.PlayerBowlingInfo;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -20,5 +21,12 @@ public class BowlingInfoValidationHelper {
 	public void validatePlayerId(String playerId) {
 		if (playerId == null || "".equalsIgnoreCase(playerId))
 			throw new RuntimeException("Missing Required Field: " + PLAYER_ID);
+	}
+
+	public void validatePlayerBowlingInfo(PlayerBowlingInfo playerBowlingInfo) {
+		validatePlayerId(playerBowlingInfo.getPlayerId());
+
+		playerBowlingInfo.getBowlingStatistics().stream()
+				.forEach(bowlingInfo -> validateCricketFormat(bowlingInfo.getFormat()));
 	}
 }
