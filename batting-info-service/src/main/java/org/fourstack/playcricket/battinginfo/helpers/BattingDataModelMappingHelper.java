@@ -37,37 +37,43 @@ public class BattingDataModelMappingHelper {
 
 		return dataBaseModel;
 	}
-
-	private List<BattingInfoData> generatePlayersStatistics(List<BattingInfo> battingInfoList, String playerId) {
+	
+	public List<BattingInfoData> generatePlayersStatistics(List<BattingInfo> battingInfoList, String playerId) {
 		List<BattingInfoData> battingDataList = new ArrayList<>();
 
 		for (BattingInfo battingInfo : battingInfoList) {
-			BattingInfoData battingInfoData = new BattingInfoData();
-			setFormat(battingInfoData, battingInfo.getFormat());
-			battingInfoData.setMatches(battingInfo.getMatches());
-			battingInfoData.setAverage(battingInfo.getAverage());
-			battingInfoData.setBalls(battingInfo.getBalls());
-			battingInfoData.setBattingInfoId(generateBattingInfoId(playerId, battingInfoData.getFormat()));
-			battingInfoData.setDucks(battingInfo.getDucks());
-			battingInfoData.setFours(battingInfo.getFours());
-			battingInfoData.setHighest(battingInfo.getHighest());
-			battingInfoData.setInnings(battingInfo.getInnings());
-			battingInfoData.setNoOfCenturies(battingInfo.getNoOfCenturies());
-			battingInfoData.setNoOfDoubleCenturies(battingInfo.getNoOfDoubleCenturies());
-			battingInfoData.setNoOfHalfCenturies(battingInfo.getNoOfHalfCenturies());
-			battingInfoData.setNoOfTripleCenturies(battingInfo.getNoOfTripleCenturies());
-			battingInfoData.setNoOfQuadrupleCenturies(battingInfo.getNoOfQuadrupleCenturies());
-			battingInfoData.setNumberOfNotOuts(battingInfo.getNumberOfNotOuts());
-			battingInfoData.setRuns(battingInfo.getRuns());
-			battingInfoData.setSixes(battingInfo.getSixes());
-			battingInfoData.setStrikeRate(battingInfo.getStrikeRate());
-
+			BattingInfoData battingInfoData = convertBattingInfoToData(battingInfo, playerId);
 			battingDataList.add(battingInfoData);
 		}
 
 		return battingDataList;
-
 	}
+	
+	public BattingInfoData convertBattingInfoToData(BattingInfo battingInfo, String playerId) {
+		BattingInfoData battingInfoData = new BattingInfoData();
+		setFormat(battingInfoData, battingInfo.getFormat());
+		battingInfoData.setMatches(battingInfo.getMatches());
+		battingInfoData.setAverage(battingInfo.getAverage());
+		battingInfoData.setBalls(battingInfo.getBalls());
+		battingInfoData.setBattingInfoId(generateBattingInfoId(playerId, battingInfoData.getFormat()));
+		battingInfoData.setDucks(battingInfo.getDucks());
+		battingInfoData.setFours(battingInfo.getFours());
+		battingInfoData.setHighest(battingInfo.getHighest());
+		battingInfoData.setInnings(battingInfo.getInnings());
+		battingInfoData.setNoOfCenturies(battingInfo.getNoOfCenturies());
+		battingInfoData.setNoOfDoubleCenturies(battingInfo.getNoOfDoubleCenturies());
+		battingInfoData.setNoOfHalfCenturies(battingInfo.getNoOfHalfCenturies());
+		battingInfoData.setNoOfTripleCenturies(battingInfo.getNoOfTripleCenturies());
+		battingInfoData.setNoOfQuadrupleCenturies(battingInfo.getNoOfQuadrupleCenturies());
+		battingInfoData.setNumberOfNotOuts(battingInfo.getNumberOfNotOuts());
+		battingInfoData.setRuns(battingInfo.getRuns());
+		battingInfoData.setSixes(battingInfo.getSixes());
+		battingInfoData.setStrikeRate(battingInfo.getStrikeRate());
+		
+		return battingInfoData;
+	}
+
+	
 
 	private void setFormat(BattingInfoData battingInfoData, CricketFormat format) {
 		switch (format) {
@@ -97,11 +103,11 @@ public class BattingDataModelMappingHelper {
 		}
 	}
 
-	private String generatePlayerBattingInfoId(String playerId) {
+	public String generatePlayerBattingInfoId(String playerId) {
 		return BATTING_INFO_ID_PREFIX + playerId;
 	}
 
-	private String generateBattingInfoId(String playerId, String format) {
+	public String generateBattingInfoId(String playerId, String format) {
 		return BATTING_INFO_ID_PREFIX + format + HYPEN + playerId;
 	}
 
@@ -113,34 +119,38 @@ public class BattingDataModelMappingHelper {
 		battingInfo.setBattingStatistics(generatePlayersStatistics(battingInfoData.getStatistics()));
 		return battingInfo;
 	}
-
-	private List<BattingInfo> generatePlayersStatistics(List<BattingInfoData> battingDataList) {
+	
+	public List<BattingInfo> generatePlayersStatistics(List<BattingInfoData> battingDataList) {
 		List<BattingInfo> battingList = new ArrayList<>();
 
 		for (BattingInfoData data : battingDataList) {
-			BattingInfo info = new BattingInfo();
-			info.setAverage(data.getAverage());
-			info.setBalls(data.getBalls());
-			info.setDucks(data.getDucks());
-			setFormat(info, data.getFormat());
-			info.setFours(data.getFours());
-			info.setHighest(data.getHighest());
-			info.setInnings(data.getInnings());
-			info.setMatches(data.getMatches());
-			info.setNoOfCenturies(data.getNoOfCenturies());
-			info.setNoOfDoubleCenturies(data.getNoOfDoubleCenturies());
-			info.setNoOfHalfCenturies(data.getNoOfHalfCenturies());
-			info.setNoOfQuadrupleCenturies(data.getNoOfQuadrupleCenturies());
-			info.setNoOfTripleCenturies(data.getNoOfTripleCenturies());
-			info.setNumberOfNotOuts(data.getNumberOfNotOuts());
-			info.setRuns(data.getRuns());
-			info.setSixes(data.getSixes());
-			info.setStrikeRate(data.getStrikeRate());
-
+			BattingInfo info = convertBattingDataToInfo(data);
 			battingList.add(info);
 		}
-
 		return battingList;
+	}
+	
+	public BattingInfo convertBattingDataToInfo(BattingInfoData data) {
+		BattingInfo info = new BattingInfo();
+		info.setAverage(data.getAverage());
+		info.setBalls(data.getBalls());
+		info.setDucks(data.getDucks());
+		setFormat(info, data.getFormat());
+		info.setFours(data.getFours());
+		info.setHighest(data.getHighest());
+		info.setInnings(data.getInnings());
+		info.setMatches(data.getMatches());
+		info.setNoOfCenturies(data.getNoOfCenturies());
+		info.setNoOfDoubleCenturies(data.getNoOfDoubleCenturies());
+		info.setNoOfHalfCenturies(data.getNoOfHalfCenturies());
+		info.setNoOfQuadrupleCenturies(data.getNoOfQuadrupleCenturies());
+		info.setNoOfTripleCenturies(data.getNoOfTripleCenturies());
+		info.setNumberOfNotOuts(data.getNumberOfNotOuts());
+		info.setRuns(data.getRuns());
+		info.setSixes(data.getSixes());
+		info.setStrikeRate(data.getStrikeRate());
+		
+		return info;
 	}
 
 	public Page<PlayerBattingInfo> convertPlayerBattingDataPageToPlayerBattingInfoPage(Page<PlayerBattingInfoData> playerDataPage,

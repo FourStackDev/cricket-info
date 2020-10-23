@@ -2,6 +2,7 @@ package org.fourstack.playcricket.battinginfo.services;
 
 import java.util.List;
 
+import org.fourstack.playcricket.battinginfo.models.BattingInfo;
 import org.fourstack.playcricket.battinginfo.models.PlayerBattingInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,4 +18,6 @@ public interface BattingInfoService {
 	public PlayerBattingInfo getPlayersBattingStatisticsByPlayerId(String playerId);
 
 	public PlayerBattingInfo savePlayersBattingStatistics(PlayerBattingInfo playerInfo);
+	
+	public PlayerBattingInfo updateBattingInfoForPlayerBattingStatistics(BattingInfo battingInfo, String playerId);
 }

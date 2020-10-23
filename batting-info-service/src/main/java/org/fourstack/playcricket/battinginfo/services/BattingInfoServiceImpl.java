@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.fourstack.playcricket.battinginfo.helpers.BattingInfoServiceHelper;
 import org.fourstack.playcricket.battinginfo.helpers.BattingInfoValidationHelper;
+import org.fourstack.playcricket.battinginfo.models.BattingInfo;
 import org.fourstack.playcricket.battinginfo.models.PlayerBattingInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,10 +13,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class BattingInfoServiceImpl implements BattingInfoService {
-	
+
 	@Autowired
 	private BattingInfoServiceHelper battingServiceHelper;
-	
+
 	@Autowired
 	private BattingInfoValidationHelper validationHelper;
 
@@ -43,5 +44,12 @@ public class BattingInfoServiceImpl implements BattingInfoService {
 	public PlayerBattingInfo savePlayersBattingStatistics(PlayerBattingInfo playerInfo) {
 		validationHelper.validatePlayerBattingInfo(playerInfo);
 		return battingServiceHelper.savePlayersBattingStatistics(playerInfo);
+	}
+
+	@Override
+	public PlayerBattingInfo updateBattingInfoForPlayerBattingStatistics(BattingInfo battingInfo, String playerId) {
+		validationHelper.validatePlayerId(playerId);
+		validationHelper.validateCricketFormat(battingInfo.getFormat());
+		return battingServiceHelper.updateBattingInfoForPlayerBattingStatistics(battingInfo, playerId);
 	}
 }
