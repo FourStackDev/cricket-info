@@ -2,6 +2,7 @@ package org.fourstack.playcricket.battinginfo.controllers;
 
 import static org.fourstack.playcricket.battinginfo.constants.BattingInfoServiceConstants.*;
 
+import org.fourstack.playcricket.battinginfo.models.BattingInfo;
 import org.fourstack.playcricket.battinginfo.models.PlayerBattingInfo;
 import org.fourstack.playcricket.battinginfo.services.BattingInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -53,12 +55,21 @@ public class BattingInfoController {
 	public PlayerBattingInfo getPlayerBattingStatisticsByPlayerId(@PathVariable(value = "player-id") String playerId) {
 		return battingInfoService.getPlayersBattingStatisticsByPlayerId(playerId);
 	}
-	
+
 	@ApiOperation(httpMethod = "POST", value = "API to consume Player Batting Statistics and to save it to Database")
 	@PostMapping("/player-batting-statistics")
 	public ResponseEntity<PlayerBattingInfo> addPlayerBattingStatistics(@RequestBody PlayerBattingInfo battingInfo) {
 		PlayerBattingInfo savedBattingInfo = battingInfoService.savePlayersBattingStatistics(battingInfo);
 		return new ResponseEntity<PlayerBattingInfo>(savedBattingInfo, HttpStatus.CREATED);
+	}
+
+	@ApiOperation(httpMethod = "PATCH", value = "API to Patch the Batting Statistics")
+	@PatchMapping("/player-batting-statistics/{player-id}")
+	public ResponseEntity<PlayerBattingInfo> patchBattingInfo(@PathVariable("player-id") String playerId,
+			@RequestBody BattingInfo battingInfo) {
+		PlayerBattingInfo updatedStatistics = battingInfoService
+				.updateBattingInfoForPlayerBattingStatistics(battingInfo, playerId);
+		return new ResponseEntity<PlayerBattingInfo>(updatedStatistics, HttpStatus.OK);
 	}
 
 }
