@@ -8,22 +8,22 @@ import java.util.List;
 
 import org.fourstack.playcricket.bowlinginfo.models.BowlingInfo;
 import org.fourstack.playcricket.bowlinginfo.models.PlayerBowlingInfo;
-import org.fourstack.playcricket.bowlinginfo.models.data.BowlingInfoData;
-import org.fourstack.playcricket.bowlinginfo.models.data.PlayerBowlingInfoData;
+import org.fourstack.playcricket.bowlinginfo.models.data.BowlingStatistics;
+import org.fourstack.playcricket.bowlinginfo.models.data.PlayerBowlingData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component
 public class PlayerBowlingInfoToPalyerBowlingDataConverter
-		implements Converter<PlayerBowlingInfo, PlayerBowlingInfoData> {
+		implements Converter<PlayerBowlingInfo, PlayerBowlingData> {
 
 	@Autowired
-	private BowlingInfoToBowlingDataConverter bowlingDataConverter;
+	private BowlingInfoToBowlingStatisticsConverter bowlingDataConverter;
 
 	@Override
-	public PlayerBowlingInfoData convert(PlayerBowlingInfo source) {
-		PlayerBowlingInfoData data = new PlayerBowlingInfoData();
+	public PlayerBowlingData convert(PlayerBowlingInfo source) {
+		PlayerBowlingData data = new PlayerBowlingData();
 		data.setPlayerBowlingInfoId(generatePlayerBowlingInfoId(source.getPlayerId()));
 		data.setPlayerId(source.getPlayerId());
 
@@ -31,17 +31,17 @@ public class PlayerBowlingInfoToPalyerBowlingDataConverter
 		return data;
 	}
 
-	public List<BowlingInfoData> generatePlayerStatistics(List<BowlingInfo> bowlingInfoList, String playerId) {
-		List<BowlingInfoData> bowlingInfoDataList = new ArrayList<>();
+	public List<BowlingStatistics> generatePlayerStatistics(List<BowlingInfo> bowlingInfoList, String playerId) {
+		List<BowlingStatistics> bowlingInfoDataList = new ArrayList<>();
 		for (BowlingInfo info : bowlingInfoList) {
-			BowlingInfoData data = mapBowlingInfoToData(playerId, info);
+			BowlingStatistics data = mapBowlingInfoToData(playerId, info);
 			bowlingInfoDataList.add(data);
 		}
 		return bowlingInfoDataList;
 	}
 
-	public BowlingInfoData mapBowlingInfoToData(String playerId, BowlingInfo info) {
-		BowlingInfoData data = bowlingDataConverter.convert(info);
+	public BowlingStatistics mapBowlingInfoToData(String playerId, BowlingInfo info) {
+		BowlingStatistics data = bowlingDataConverter.convert(info);
 		data.setBowlingInfoId(generateBowlingInfoId(playerId, info.getFormat().name()));
 		return data;
 	}

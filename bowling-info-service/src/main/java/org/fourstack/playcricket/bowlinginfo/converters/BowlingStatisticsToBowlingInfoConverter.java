@@ -8,15 +8,15 @@ import static org.fourstack.playcricket.bowlinginfo.constants.BowlingInfoConstan
 import static org.fourstack.playcricket.bowlinginfo.constants.BowlingInfoConstants.FORMAT_TEST;
 
 import org.fourstack.playcricket.bowlinginfo.models.BowlingInfo;
-import org.fourstack.playcricket.bowlinginfo.models.data.BowlingInfoData;
+import org.fourstack.playcricket.bowlinginfo.models.data.BowlingStatistics;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Service;
 
 @Service
-public class BowlingDataToBowlingInfoConverter implements Converter<BowlingInfoData, BowlingInfo> {
+public class BowlingStatisticsToBowlingInfoConverter implements Converter<BowlingStatistics, BowlingInfo> {
 
 	@Override
-	public BowlingInfo convert(BowlingInfoData source) {
+	public BowlingInfo convert(BowlingStatistics source) {
 		BowlingInfo info = new BowlingInfo();
 		setFormat(info, source.getFormat());
 

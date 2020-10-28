@@ -6,8 +6,8 @@ import java.util.stream.Collectors;
 
 import org.fourstack.playcricket.bowlinginfo.models.BowlingInfo;
 import org.fourstack.playcricket.bowlinginfo.models.PlayerBowlingInfo;
-import org.fourstack.playcricket.bowlinginfo.models.data.BowlingInfoData;
-import org.fourstack.playcricket.bowlinginfo.models.data.PlayerBowlingInfoData;
+import org.fourstack.playcricket.bowlinginfo.models.data.BowlingStatistics;
+import org.fourstack.playcricket.bowlinginfo.models.data.PlayerBowlingData;
 import org.fourstack.playcricket.bowlinginfo.repositories.BowlingInfoDataRepository;
 import org.fourstack.playcricket.bowlinginfo.repositories.PlayerBowlingInfoDataRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ public class BowlingInfoServiceHelper {
 	private BowlingExternalApiHelper externalApiHelper;
 
 	public List<PlayerBowlingInfo> getAllPlayersBowlingStatistics() {
-		List<PlayerBowlingInfoData> dataList = playerBowlingRepository.findAll();
+		List<PlayerBowlingData> dataList = playerBowlingRepository.findAll();
 
 		if (dataList == null || dataList.size() == 0)
 			throw new RuntimeException("No Data Found");
@@ -41,7 +41,7 @@ public class BowlingInfoServiceHelper {
 	}
 
 	public Page<PlayerBowlingInfo> getPlayersBowlingStatistics(Pageable pageable) {
-		Page<PlayerBowlingInfoData> bowlingPage = playerBowlingRepository.findAll(pageable);
+		Page<PlayerBowlingData> bowlingPage = playerBowlingRepository.findAll(pageable);
 
 		if (bowlingPage == null || !bowlingPage.hasContent())
 			throw new RuntimeException("No Data Found");
@@ -50,12 +50,12 @@ public class BowlingInfoServiceHelper {
 	}
 
 	public PlayerBowlingInfo getPlayerBowlingStatisticsById(String id) {
-		Optional<PlayerBowlingInfoData> optionalStatistics = playerBowlingRepository.findById(id);
+		Optional<PlayerBowlingData> optionalStatistics = playerBowlingRepository.findById(id);
 
 		return extractBowlingInfo(id, optionalStatistics);
 	}
 
-	private PlayerBowlingInfo extractBowlingInfo(String id, Optional<PlayerBowlingInfoData> optionalStatistics) {
+	private PlayerBowlingInfo extractBowlingInfo(String id, Optional<PlayerBowlingData> optionalStatistics) {
 		if (optionalStatistics.isPresent()) {
 			return mappingHelper.mapBowlingDatabaseModelToApiExposedModel(optionalStatistics.get());
 		}
@@ -64,20 +64,20 @@ public class BowlingInfoServiceHelper {
 	}
 
 	public PlayerBowlingInfo getPlayerBowlingStatisticsByPlayerId(String playerId) {
-		Optional<PlayerBowlingInfoData> optionalStatistics = playerBowlingRepository.findByPlayerId(playerId);
+		Optional<PlayerBowlingData> optionalStatistics = playerBowlingRepository.findByPlayerId(playerId);
 		return extractBowlingInfo(playerId, optionalStatistics);
 	}
 
 	public PlayerBowlingInfo savePlayersBowlingStatistics(PlayerBowlingInfo bowlingInfo) {
 		if (externalApiHelper.checkIfPlayerExistsForPlayerId(bowlingInfo.getPlayerId())) {
-			PlayerBowlingInfoData bowlingData = mappingHelper.mapBowlingInfoToDatabaseModel(bowlingInfo);
+			PlayerBowlingData bowlingData = mappingHelper.mapBowlingInfoToDatabaseModel(bowlingInfo);
 			saveBowlingInfoData(bowlingData);
 			bowlingInfo.setBowlingInfoId(bowlingData.getPlayerBowlingInfoId());
 		}
 		return bowlingInfo;
 	}
 
-	private void saveBowlingInfoData(PlayerBowlingInfoData bowlingData) {
+	private void saveBowlingInfoData(PlayerBowlingData bowlingData) {
 		bowlingData.getStatistics().stream().forEach(data -> bowlingRepository.save(data));
 		playerBowlingRepository.save(bowlingData);
 	}
@@ -86,17 +86,17 @@ public class BowlingInfoServiceHelper {
 		// check if the Player Exists for playerId
 		if (externalApiHelper.checkIfPlayerExistsForPlayerId(playerId)) {
 			// map the BowlingInfo to BowlingInfoData
-			BowlingInfoData dataFromApi = mappingHelper.mapBowlingInfoToData(playerId, bowlingInfo);
+			BowlingStatistics dataFromApi = mappingHelper.mapBowlingInfoToData(playerId, bowlingInfo);
 
 			// fetch the PlayerBowlingData from Repository using playerId
-			Optional<PlayerBowlingInfoData> optionalBowlingData = playerBowlingRepository.findByPlayerId(playerId);
+			Optional<PlayerBowlingData> optionalBowlingData = playerBowlingRepository.findByPlayerId(playerId);
 			if (optionalBowlingData.isPresent()) {
-				PlayerBowlingInfoData existingBowlingInfoData = optionalBowlingData.get();
+				PlayerBowlingData existingBowlingInfoData = optionalBowlingData.get();
 
 				// check whether the BowlingInfo(Statistics) is already exists or not
-				Optional<BowlingInfoData> optionalExistingData = existingBowlingInfoData.getStatistics().stream()
+				Optional<BowlingStatistics> optionalExistingData = existingBowlingInfoData.getStatistics().stream()
 						.filter(data -> data.getBowlingInfoId().equals(dataFromApi.getBowlingInfoId())).findAny();
-				BowlingInfoData existingData = optionalExistingData.orElse(null);
+				BowlingStatistics existingData = optionalExistingData.orElse(null);
 				if (existingData == null) {
 					// if not exists update the dataFromApi as Existing Data
 					existingBowlingInfoData.getStatistics().add(dataFromApi);
@@ -114,7 +114,7 @@ public class BowlingInfoServiceHelper {
 		return null;
 	}
 
-	private void updateBowlingInfoData(BowlingInfoData existingData, BowlingInfoData dataFromApi) {
+	private void updateBowlingInfoData(BowlingStatistics existingData, BowlingStatistics dataFromApi) {
 		if (dataFromApi.getAverage() > 0)
 			existingData.setAverage(dataFromApi.getAverage());
 		

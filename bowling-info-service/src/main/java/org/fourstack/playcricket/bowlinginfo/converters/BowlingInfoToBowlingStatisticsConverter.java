@@ -6,16 +6,16 @@ import static org.fourstack.playcricket.bowlinginfo.constants.BowlingInfoConstan
 
 import org.fourstack.playcricket.bowlinginfo.codetype.CricketFormat;
 import org.fourstack.playcricket.bowlinginfo.models.BowlingInfo;
-import org.fourstack.playcricket.bowlinginfo.models.data.BowlingInfoData;
+import org.fourstack.playcricket.bowlinginfo.models.data.BowlingStatistics;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component
-public class BowlingInfoToBowlingDataConverter implements Converter<BowlingInfo, BowlingInfoData>{
+public class BowlingInfoToBowlingStatisticsConverter implements Converter<BowlingInfo, BowlingStatistics>{
 
 	@Override
-	public BowlingInfoData convert(BowlingInfo source) {
-		BowlingInfoData data = new BowlingInfoData();
+	public BowlingStatistics convert(BowlingInfo source) {
+		BowlingStatistics data = new BowlingStatistics();
 		setFormat(data, source.getFormat());
 		data.setMatches(source.getMatches());
 		data.setInnings(source.getInnings());
@@ -34,7 +34,7 @@ public class BowlingInfoToBowlingDataConverter implements Converter<BowlingInfo,
 		return data;
 	}
 	
-	private void setFormat(BowlingInfoData data, CricketFormat format) {
+	private void setFormat(BowlingStatistics data, CricketFormat format) {
 		switch (format) {
 		case TEST:
 			data.setFormat(FORMAT_TEST);

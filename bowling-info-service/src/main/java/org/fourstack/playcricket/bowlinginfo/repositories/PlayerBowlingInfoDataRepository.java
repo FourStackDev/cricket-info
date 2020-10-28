@@ -2,13 +2,13 @@ package org.fourstack.playcricket.bowlinginfo.repositories;
 
 import java.util.Optional;
 
-import org.fourstack.playcricket.bowlinginfo.models.data.PlayerBowlingInfoData;
+import org.fourstack.playcricket.bowlinginfo.models.data.PlayerBowlingData;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PlayerBowlingInfoDataRepository extends JpaRepository<PlayerBowlingInfoData, String> {
+public interface PlayerBowlingInfoDataRepository extends JpaRepository<PlayerBowlingData, String> {
 
-	public Optional<PlayerBowlingInfoData> findByPlayerId(String playerId);
+	public Optional<PlayerBowlingData> findByPlayerId(String playerId);
 
 }
