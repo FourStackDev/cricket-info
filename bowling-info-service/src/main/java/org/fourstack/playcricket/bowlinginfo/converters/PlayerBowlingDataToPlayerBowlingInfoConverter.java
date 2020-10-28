@@ -5,22 +5,22 @@ import java.util.List;
 
 import org.fourstack.playcricket.bowlinginfo.models.BowlingInfo;
 import org.fourstack.playcricket.bowlinginfo.models.PlayerBowlingInfo;
-import org.fourstack.playcricket.bowlinginfo.models.data.BowlingInfoData;
-import org.fourstack.playcricket.bowlinginfo.models.data.PlayerBowlingInfoData;
+import org.fourstack.playcricket.bowlinginfo.models.data.BowlingStatistics;
+import org.fourstack.playcricket.bowlinginfo.models.data.PlayerBowlingData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PlayerBowlingInfoDataToPlayerBowlingInfoConverter
-		implements Converter<PlayerBowlingInfoData, PlayerBowlingInfo> {
+public class PlayerBowlingDataToPlayerBowlingInfoConverter
+		implements Converter<PlayerBowlingData, PlayerBowlingInfo> {
 	
 	@Autowired
 	private ConversionService bowlingInfoConverter;
 
 	@Override
-	public PlayerBowlingInfo convert(PlayerBowlingInfoData source) {
+	public PlayerBowlingInfo convert(PlayerBowlingData source) {
 		PlayerBowlingInfo info = new PlayerBowlingInfo();
 		info.setBowlingInfoId(source.getPlayerBowlingInfoId());
 		info.setPlayerId(source.getPlayerId());
@@ -29,17 +29,17 @@ public class PlayerBowlingInfoDataToPlayerBowlingInfoConverter
 		return info;
 	}
 
-	public List<BowlingInfo> generatePlayerStatistics(List<BowlingInfoData> bowlingDataList) {
+	public List<BowlingInfo> generatePlayerStatistics(List<BowlingStatistics> bowlingDataList) {
 		List<BowlingInfo> bowlingInfoList = new ArrayList<>();
 
-		for (BowlingInfoData data : bowlingDataList) {
+		for (BowlingStatistics data : bowlingDataList) {
 			BowlingInfo info = mapBowlingDataToInfoModel(data);
 			bowlingInfoList.add(info);
 		}
 		return bowlingInfoList;
 	}
 
-	public BowlingInfo mapBowlingDataToInfoModel(BowlingInfoData data) {
+	public BowlingInfo mapBowlingDataToInfoModel(BowlingStatistics data) {
 		return bowlingInfoConverter.convert(data, BowlingInfo.class);
 	}
 }

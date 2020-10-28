@@ -25,7 +25,7 @@ import lombok.Data;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "player_bowling_data")
-public class PlayerBowlingInfoData {
+public class PlayerBowlingData {
 
 	@Id
 	private String playerBowlingInfoId;
@@ -33,9 +33,9 @@ public class PlayerBowlingInfoData {
 	@Column(name = "playerId", unique = true)
 	private String playerId;
 
-	@OneToMany(targetEntity = BowlingInfoData.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+	@OneToMany(targetEntity = BowlingStatistics.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
 	@JoinColumn(name = "playerBowlId", referencedColumnName = "playerBowlingInfoId")
-	private List<BowlingInfoData> statistics;
+	private List<BowlingStatistics> statistics;
 
 	@CreationTimestamp
 	@Column(name = "created_date", nullable = false, updatable = false)

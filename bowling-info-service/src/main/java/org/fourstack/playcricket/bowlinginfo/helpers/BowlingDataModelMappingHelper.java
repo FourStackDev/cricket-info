@@ -13,8 +13,8 @@ import java.util.stream.Collectors;
 import org.fourstack.playcricket.bowlinginfo.converters.PlayerBowlingInfoToPalyerBowlingDataConverter;
 import org.fourstack.playcricket.bowlinginfo.models.BowlingInfo;
 import org.fourstack.playcricket.bowlinginfo.models.PlayerBowlingInfo;
-import org.fourstack.playcricket.bowlinginfo.models.data.BowlingInfoData;
-import org.fourstack.playcricket.bowlinginfo.models.data.PlayerBowlingInfoData;
+import org.fourstack.playcricket.bowlinginfo.models.data.BowlingStatistics;
+import org.fourstack.playcricket.bowlinginfo.models.data.PlayerBowlingData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
@@ -31,11 +31,11 @@ public class BowlingDataModelMappingHelper {
 	@Autowired
 	private ConversionService playerBowlingInfoConverter;
 
-	public PlayerBowlingInfoData mapBowlingInfoToDatabaseModel(PlayerBowlingInfo bowlingInfo) {
+	public PlayerBowlingData mapBowlingInfoToDatabaseModel(PlayerBowlingInfo bowlingInfo) {
 		return bowlingDataConverter.convert(bowlingInfo);
 	}
 	
-	public BowlingInfoData mapBowlingInfoToData(String playerId, BowlingInfo bowlingInfo) {
+	public BowlingStatistics mapBowlingInfoToData(String playerId, BowlingInfo bowlingInfo) {
 		return bowlingDataConverter.mapBowlingInfoToData(playerId, bowlingInfo);
 	}
 	
@@ -53,11 +53,11 @@ public class BowlingDataModelMappingHelper {
 		}
 	}
 
-	public PlayerBowlingInfo mapBowlingDatabaseModelToApiExposedModel(PlayerBowlingInfoData data) {
+	public PlayerBowlingInfo mapBowlingDatabaseModelToApiExposedModel(PlayerBowlingData data) {
 		 return playerBowlingInfoConverter.convert(data, PlayerBowlingInfo.class);
 	}
 
-	public BowlingInfo mapBowlingDataToInfoModel(BowlingInfoData data) {
+	public BowlingInfo mapBowlingDataToInfoModel(BowlingStatistics data) {
 		BowlingInfo info = new BowlingInfo();
 		setFormat(info, data.getFormat());
 
@@ -78,7 +78,7 @@ public class BowlingDataModelMappingHelper {
 		return info;
 	}
 	
-	public Page<PlayerBowlingInfo> convertBowlingDataPageToBowlingInfoPage(Page<PlayerBowlingInfoData> bowlingDataPage,
+	public Page<PlayerBowlingInfo> convertBowlingDataPageToBowlingInfoPage(Page<PlayerBowlingData> bowlingDataPage,
 			Pageable pageable) {
 		List<PlayerBowlingInfo> infoList = bowlingDataPage.toList().stream()
 				.map(data -> mapBowlingDatabaseModelToApiExposedModel(data)).collect(Collectors.toList());
