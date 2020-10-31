@@ -70,5 +70,4 @@ public class BowlingInfoController {
 		return new ResponseEntity<PlayerBowlingInfo>(patchedBowler, HttpStatus.OK);
 
 	}
-
 }

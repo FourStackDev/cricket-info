@@ -19,7 +19,7 @@ public class BowlingInfoServiceImpl implements BowlingInfoService {
 	
 	@Autowired
 	private BowlingInfoValidationHelper validationHelper;
-
+	
 	@Override
 	public List<PlayerBowlingInfo> getAllPlayersBowlingStatistics() {
 		return bowlingHelper.getAllPlayersBowlingStatistics();

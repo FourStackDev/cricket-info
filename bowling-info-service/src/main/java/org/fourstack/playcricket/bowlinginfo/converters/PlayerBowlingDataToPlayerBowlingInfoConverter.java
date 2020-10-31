@@ -8,7 +8,6 @@ import org.fourstack.playcricket.bowlinginfo.models.PlayerBowlingInfo;
 import org.fourstack.playcricket.bowlinginfo.models.data.BowlingStatistics;
 import org.fourstack.playcricket.bowlinginfo.models.data.PlayerBowlingData;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Service;
 
@@ -16,11 +15,13 @@ import org.springframework.stereotype.Service;
 public class PlayerBowlingDataToPlayerBowlingInfoConverter
 		implements Converter<PlayerBowlingData, PlayerBowlingInfo> {
 	
-	@Autowired
-	private ConversionService bowlingInfoConverter;
+	@Autowired	
+	private BowlingStatisticsToBowlingInfoConverter bowlingStatisticsToInfoConverter;
 
 	@Override
 	public PlayerBowlingInfo convert(PlayerBowlingData source) {
+		System.out.println(
+				"PlayerBowlingDataToPlayerBowlingInfoConverter:: CONVERTING PlayerBowlingData TO PlayerBowlingInfo");
 		PlayerBowlingInfo info = new PlayerBowlingInfo();
 		info.setBowlingInfoId(source.getPlayerBowlingInfoId());
 		info.setPlayerId(source.getPlayerId());
@@ -40,6 +41,6 @@ public class PlayerBowlingDataToPlayerBowlingInfoConverter
 	}
 
 	public BowlingInfo mapBowlingDataToInfoModel(BowlingStatistics data) {
-		return bowlingInfoConverter.convert(data, BowlingInfo.class);
+		return bowlingStatisticsToInfoConverter.convert(data);
 	}
 }

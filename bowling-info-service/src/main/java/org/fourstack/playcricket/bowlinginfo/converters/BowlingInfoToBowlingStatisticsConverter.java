@@ -15,6 +15,7 @@ public class BowlingInfoToBowlingStatisticsConverter implements Converter<Bowlin
 
 	@Override
 	public BowlingStatistics convert(BowlingInfo source) {
+		System.out.println("---------------------BowlingInfoToBowlingStatisticsConverter::CONVERTING BowlingInfo TO BowlingStatistics------------------------------");
 		BowlingStatistics data = new BowlingStatistics();
 		setFormat(data, source.getFormat());
 		data.setMatches(source.getMatches());
