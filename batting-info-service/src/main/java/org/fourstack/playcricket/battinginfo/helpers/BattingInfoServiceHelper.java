@@ -6,10 +6,11 @@ import java.util.stream.Collectors;
 
 import org.fourstack.playcricket.battinginfo.models.BattingInfo;
 import org.fourstack.playcricket.battinginfo.models.PlayerBattingInfo;
-import org.fourstack.playcricket.battinginfo.models.data.BattingInfoData;
-import org.fourstack.playcricket.battinginfo.models.data.PlayerBattingInfoData;
-import org.fourstack.playcricket.battinginfo.repositories.BattingInfoDataRepository;
-import org.fourstack.playcricket.battinginfo.repositories.PlayerBattingInfoRepository;
+import org.fourstack.playcricket.battinginfo.models.data.BattingStatistics;
+import org.fourstack.playcricket.battinginfo.models.data.PlayerBattingData;
+import org.fourstack.playcricket.battinginfo.repositories.BattingStatisticsRepository;
+import org.fourstack.playcricket.battinginfo.repositories.PlayerBattingDataRepository;
+import org.fourstack.playcricket.battinginfo.util.BattingServiceIdGenerationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,10 +20,10 @@ import org.springframework.stereotype.Component;
 public class BattingInfoServiceHelper {
 
 	@Autowired
-	private BattingInfoDataRepository battingInfoRepository;
+	private BattingStatisticsRepository battingStatisticsRepository;
 
 	@Autowired
-	private PlayerBattingInfoRepository playerBattingInfoRepository;
+	private PlayerBattingDataRepository playerBattingInfoRepository;
 
 	@Autowired
 	private BattingDataModelMappingHelper mappingHelper;
@@ -31,7 +32,7 @@ public class BattingInfoServiceHelper {
 	private BattingExternalApiHelper externalApiHelper;
 
 	public List<PlayerBattingInfo> getAllPlayersBattingStatistics() {
-		List<PlayerBattingInfoData> battingInfoDataList = playerBattingInfoRepository.findAll();
+		List<PlayerBattingData> battingInfoDataList = playerBattingInfoRepository.findAll();
 
 		if (battingInfoDataList == null || battingInfoDataList.size() == 0)
 			throw new RuntimeException("Unable to find the data");
@@ -44,7 +45,7 @@ public class BattingInfoServiceHelper {
 	}
 
 	public Page<PlayerBattingInfo> getPlayersBattingStatistics(Pageable pageable) {
-		Page<PlayerBattingInfoData> battingDataPage = playerBattingInfoRepository.findAll(pageable);
+		Page<PlayerBattingData> battingDataPage = playerBattingInfoRepository.findAll(pageable);
 
 		if (!battingDataPage.hasContent())
 			throw new RuntimeException("Unable to find the data");
@@ -53,14 +54,14 @@ public class BattingInfoServiceHelper {
 	}
 
 	public PlayerBattingInfo getPlayersBattingStatisticsById(String id) {
-		Optional<PlayerBattingInfoData> optionalPalyerInfo = playerBattingInfoRepository.findById(id);
+		Optional<PlayerBattingData> optionalPalyerInfo = playerBattingInfoRepository.findById(id);
 
 		return extract(id, optionalPalyerInfo);
 	}
 
-	private PlayerBattingInfo extract(String id, Optional<PlayerBattingInfoData> optionalPalyerInfo) {
+	private PlayerBattingInfo extract(String id, Optional<PlayerBattingData> optionalPalyerInfo) {
 		if (optionalPalyerInfo.isPresent()) {
-			PlayerBattingInfoData playerBattingInfoData = optionalPalyerInfo.get();
+			PlayerBattingData playerBattingInfoData = optionalPalyerInfo.get();
 			return mappingHelper.mapPlayerBattingDataModelToApiExposedModel(playerBattingInfoData);
 		}
 
@@ -68,14 +69,14 @@ public class BattingInfoServiceHelper {
 	}
 
 	public PlayerBattingInfo getPlayersBattingStatisticsByPlayerId(String playerId) {
-		Optional<PlayerBattingInfoData> optionalPalyerInfo = playerBattingInfoRepository.findByPlayerId(playerId);
+		Optional<PlayerBattingData> optionalPalyerInfo = playerBattingInfoRepository.findByPlayerId(playerId);
 
 		return extract(playerId, optionalPalyerInfo);
 	}
 
 	public PlayerBattingInfo savePlayersBattingStatistics(PlayerBattingInfo playerInfo) {
 		if (externalApiHelper.checkIfPlayerExistsForPlayerId(playerInfo.getPlayerId())) {
-			PlayerBattingInfoData playerDataModel = mappingHelper.mapBattingModelToDataBaseModel(playerInfo);
+			PlayerBattingData playerDataModel = mappingHelper.mapBattingModelToDataBaseModel(playerInfo);
 			
 			playerDataModel = savePlayersBattingData(playerDataModel);
 			playerInfo.setBattingInfoId(playerDataModel.getPalyerBattingInfoId());
@@ -83,10 +84,10 @@ public class BattingInfoServiceHelper {
 		return playerInfo;
 	}
 	
-	public PlayerBattingInfoData savePlayersBattingData(PlayerBattingInfoData playerBattingData) {
+	public PlayerBattingData savePlayersBattingData(PlayerBattingData playerBattingData) {
 		playerBattingData.getStatistics()
 		                 .stream()
-		                 .forEach(data -> battingInfoRepository.save(data));
+		                 .forEach(data -> battingStatisticsRepository.save(data));
 		return playerBattingInfoRepository.save(playerBattingData);
 	}
 	
@@ -94,19 +95,21 @@ public class BattingInfoServiceHelper {
 		// check whether the Player Exists for playerId
 		if (externalApiHelper.checkIfPlayerExistsForPlayerId(playerId)) {
 			// map the BattingInfo to DataBase model
-			BattingInfoData currentData = mappingHelper.convertBattingInfoToData(battingInfo, playerId);
+			BattingStatistics currentData = mappingHelper.convertBattingInfoToData(battingInfo);
+			currentData.setBattingInfoId(
+					BattingServiceIdGenerationUtil.generateBattingInfoId(playerId, currentData.getFormat()));
 
 			// fetch the PlayerBattingInfo using playerId
-			Optional<PlayerBattingInfoData> optionalPlayerBattingInfoData = playerBattingInfoRepository
+			Optional<PlayerBattingData> optionalPlayerBattingInfoData = playerBattingInfoRepository
 					.findByPlayerId(playerId);
 			if (optionalPlayerBattingInfoData.isPresent()) {
-				PlayerBattingInfoData playerData = optionalPlayerBattingInfoData.get();
+				PlayerBattingData playerData = optionalPlayerBattingInfoData.get();
 
 				// check whether the BattingInfo(Statistics) is already exists or not
-				List<BattingInfoData> statistics = playerData.getStatistics();
-				Optional<BattingInfoData> optionalExistingData = statistics.stream()
+				List<BattingStatistics> statistics = playerData.getStatistics();
+				Optional<BattingStatistics> optionalExistingData = statistics.stream()
 						.filter(data -> data.getBattingInfoId().equals(currentData.getBattingInfoId())).findAny();
-				BattingInfoData existingData = optionalExistingData.orElse(null);
+				BattingStatistics existingData = optionalExistingData.orElse(null);
 				if (existingData == null) {
 					// if not exists update the current data as Existing Data
 					statistics.add(currentData);
@@ -123,7 +126,7 @@ public class BattingInfoServiceHelper {
 		return null;
 	}
 	
-	public void updateBattingInfoData(BattingInfoData existingData, BattingInfoData currentData) {
+	public void updateBattingInfoData(BattingStatistics existingData, BattingStatistics currentData) {
 		if (currentData.getAverage() > 0)
 			existingData.setAverage(currentData.getAverage());
 
