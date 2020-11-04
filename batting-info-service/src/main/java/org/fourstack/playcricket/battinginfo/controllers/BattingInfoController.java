@@ -44,14 +44,17 @@ public class BattingInfoController {
 
 	@ApiOperation(httpMethod = "GET", value = "API to fetch Player Batting Statistics based on the id")
 	@GetMapping("/player-batting-statistics/{id}")
-	public PlayerBattingInfo getPlayerBattingStatisticsById(@PathVariable(value = "id") String id) {
-		return battingInfoService.getPlayersBattingStatisticsById(id);
+	public ResponseEntity<PlayerBattingInfo> getPlayerBattingStatisticsById(@PathVariable(value = "id") String id) {
+		PlayerBattingInfo playersBattingStatistics = battingInfoService.getPlayersBattingStatisticsById(id);
+		return new ResponseEntity<PlayerBattingInfo>(playersBattingStatistics, HttpStatus.OK);
 	}
 
 	@ApiOperation(httpMethod = "GET", value = "API to fetch Player Batting Statistics based on the playerId")
 	@GetMapping("/player/{player-id}/batting-statistics")
-	public PlayerBattingInfo getPlayerBattingStatisticsByPlayerId(@PathVariable(value = "player-id") String playerId) {
-		return battingInfoService.getPlayersBattingStatisticsByPlayerId(playerId);
+	public ResponseEntity<PlayerBattingInfo> getPlayerBattingStatisticsByPlayerId(
+			@PathVariable(value = "player-id") String playerId) {
+		PlayerBattingInfo playersBattingStatistics = battingInfoService.getPlayersBattingStatisticsByPlayerId(playerId);
+		return new ResponseEntity<PlayerBattingInfo>(playersBattingStatistics, HttpStatus.OK);
 	}
 
 	@ApiOperation(httpMethod = "POST", value = "API to consume Player Batting Statistics and to save it to Database")

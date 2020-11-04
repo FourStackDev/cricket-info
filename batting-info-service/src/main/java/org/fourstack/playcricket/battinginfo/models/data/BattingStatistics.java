@@ -14,7 +14,7 @@ import lombok.Data;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name =  "batting_data")
-public class BattingInfoData {
+public class BattingStatistics {
 
 	@Id
 	private String battingInfoId;
