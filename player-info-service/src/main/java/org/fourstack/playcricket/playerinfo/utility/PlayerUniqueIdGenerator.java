@@ -24,14 +24,15 @@ public class PlayerUniqueIdGenerator {
 	private String getUniqueIdByStringManipulations() {
 		LocalDateTime dateTime = LocalDateTime.now();
 
-		String uniqueId = Integer.toHexString(dateTime.getYear()) 
-				+ Integer.toHexString(dateTime.getMonthValue())
-				+ Integer.toHexString(dateTime.getDayOfMonth()) 
-				+ Integer.toHexString(dateTime.getHour())
-				+ Integer.toHexString(dateTime.getMinute()) 
-				+ Integer.toHexString(dateTime.getSecond())
-				+ Integer.toHexString(dateTime.getNano());
-		return uniqueId;
+		StringBuffer uniqueId = new StringBuffer();
+		uniqueId.append(Integer.toHexString(dateTime.getYear()))
+				.append(Integer.toHexString(dateTime.getMonthValue()))
+				.append(Integer.toHexString(dateTime.getDayOfMonth()))
+				.append(Integer.toHexString(dateTime.getHour()))
+				.append(Integer.toHexString(dateTime.getMinute()))
+				.append(Integer.toHexString(dateTime.getSecond()))
+				.append(Integer.toHexString(dateTime.getNano()));
+		return uniqueId.toString();
 
 	}
 }
