@@ -25,13 +25,15 @@ public class PlayerUniqueIdGenerator {
 		LocalDateTime dateTime = LocalDateTime.now();
 
 		StringBuffer uniqueId = new StringBuffer();
-		uniqueId.append(Integer.toHexString(dateTime.getYear()))
-				.append(Integer.toHexString(dateTime.getMonthValue()))
-				.append(Integer.toHexString(dateTime.getDayOfMonth()))
-				.append(Integer.toHexString(dateTime.getHour()))
-				.append(Integer.toHexString(dateTime.getMinute()))
-				.append(Integer.toHexString(dateTime.getSecond()))
-				.append(Integer.toHexString(dateTime.getNano()));
+		int randomNum = (int) Math.floor(Math.random() * 100);
+
+		uniqueId.append(Integer.toHexString((int) Math.floor(Math.random() * 1000)))
+				.append(Integer.toHexString(dateTime.getMinute())).append(Integer.toHexString(randomNum))
+				.append(Integer.toHexString(dateTime.getSecond())).append(Integer.toHexString(randomNum))
+				.append(Integer.toHexString(dateTime.getHour())).append(Integer.toHexString(randomNum))
+				.append(Integer.toHexString(dateTime.getMonthValue())).append(Integer.toHexString(randomNum))
+				.append(Integer.toHexString(dateTime.getDayOfMonth())).append((int) Math.floor(Math.random() * 100))
+				.append(Integer.toHexString(dateTime.getYear())).append((int) Math.floor(Math.random() * 100));
 		return uniqueId.toString();
 
 	}
